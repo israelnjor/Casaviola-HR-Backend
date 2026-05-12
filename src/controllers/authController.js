@@ -8,10 +8,12 @@ const generateToken = (id) => {
 // Register admin (only used once to create the admin account)
 const register = async (req, res) => {
   try {
+    const bcrypt = require('bcryptjs');
     const { name, email, password } = req.body;
     const existing = await Admin.findOne({ email });
     if (existing) return res.status(400).json({ message: 'Admin already exists' });
-    const admin = new Admin({ name, email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const admin = new Admin({ name, email, password: hashedPassword });
     await admin.save();
     res.status(201).json({ message: 'Admin created successfully' });
   } catch (error) {
