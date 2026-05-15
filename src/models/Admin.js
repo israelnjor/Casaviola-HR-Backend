@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const AdminSchema = new mongoose.Schema({
   name: { 
@@ -15,6 +16,20 @@ const AdminSchema = new mongoose.Schema({
   password: { 
     type: String, 
     required: true 
+  },
+  role: {
+    type: String,
+    enum: ['CEO', 'GM', 'Admin', 'Finance', 'Property Listings', 'Estate Manager', 'Customer Service'],
+    default: 'Admin'
+  },
+  staffProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Staff',
+    default: null
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   },
 }, { timestamps: true });
 
